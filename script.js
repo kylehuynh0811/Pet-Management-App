@@ -43,7 +43,6 @@ const test2 = {
 };
 //Test data
 let petArr = getFromStorage("petArr") ?? [];
-petArr.push(test1, test2);
 renderTableData(petArr);
 
 //Run when user click "Submit"

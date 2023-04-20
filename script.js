@@ -12,7 +12,6 @@ const vaccinatedInput = document.getElementById("input-vaccinated");
 const dewormedInput = document.getElementById("input-dewormed");
 const sterilizedInput = document.getElementById("input-sterilized");
 const tableBodyEl = document.getElementById("tbody");
-const calculateBMIBtn = document.getElementById("calculate-bmi-btn");
 
 const test1 = {
   id: "P001",
@@ -26,8 +25,7 @@ const test1 = {
   vaccinated: true,
   dewormed: true,
   sterilized: true,
-  date: new Date(),
-  bmi: "?",
+  date: new Date().toLocaleDateString("vi-VN"),
 };
 const test2 = {
   id: "P002",
@@ -41,16 +39,15 @@ const test2 = {
   vaccinated: false,
   dewormed: false,
   sterilized: true,
-  date: new Date(),
-  bmi: "?",
+  date: new Date().toLocaleDateString("vi-VN"),
 };
 //Test data
-const petArr = [];
+let petArr = getFromStorage("petArr") ?? [];
 petArr.push(test1, test2);
 renderTableData(petArr);
 
 //Run when user click "Submit"
-submitBtn.addEventListener("click", function (e) {
+submitBtn.addEventListener("click", (e) => {
   // Prevent the submit event from refreshing the page
   e.preventDefault();
   //Take the input data from the form
@@ -66,8 +63,7 @@ submitBtn.addEventListener("click", function (e) {
     vaccinated: vaccinatedInput.checked,
     dewormed: dewormedInput.checked,
     sterilized: sterilizedInput.checked,
-    date: new Date(),
-    bmi: "?",
+    date: new Date().toLocaleDateString("vi-VN"),
   };
   console.log(data);
   //Validate the data before processing
@@ -205,7 +201,6 @@ function renderTableData(petArr) {
                 <td><i class="bi ${
                   pet.sterilized ? "bi-check-circle-fill" : "bi-x-circle-fill"
                 }"></i></td>
-                <td>${pet.bmi}</td>
                 <td>${pet.date}</td>
                 <td>
                   <button type="button" class="btn btn-danger" onclick="deletePet('${
@@ -232,7 +227,7 @@ function deletePet(petId) {
 let healthyCheck = true;
 const healthyBtn = document.getElementById("healthy-btn");
 //Run when user click "Show Healthy Pet"
-healthyBtn.addEventListener("click", function () {
+healthyBtn.addEventListener("click", () => {
   if (healthyCheck === true) {
     const healthypetArr = petArr.filter(
       (petArr) => petArr.vaccinated && petArr.dewormed && petArr.sterilized
@@ -247,14 +242,4 @@ healthyBtn.addEventListener("click", function () {
     healthyCheck = true;
   }
 });
-//Calculating BMI
-calculateBMIBtn.onclick = function () {
-  for (let i = 0; i < petArr.length; i++) {
-    petArr[i].bmi =
-      petArr[i].type === "Dog"
-        ? ((petArr[i].weight * 703) / petArr[i].length ** 2).toFixed(2)
-        : ((petArr[i].weight * 886) / petArr[i].length ** 2).toFixed(2);
-  }
-  renderTableData(petArr);
-};
 ////////////////////////////////////////////////////////////////////////////////////////////////////

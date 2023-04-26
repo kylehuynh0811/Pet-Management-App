@@ -5,6 +5,8 @@ const typeInput = document.getElementById("input-type");
 const btnSubmit = document.getElementById("submit-btn");
 const tableBodyEl = document.getElementById("tbody");
 
+/*
+//Test data for breeds
 const breed1 = {
   breed: "Mixed Breed",
   type: "Dog",
@@ -17,71 +19,70 @@ const breed4 = {
   breed: "Meo Muop",
   type: "Cat",
 };
+*/
 
+// Get the Breeds data from local storage
 if (!getFromStorage("breedArr")) {
-  // gán dữ liệu để test
   saveToStorage("breedArr", [breed1, breed2, breed4]);
 }
+
 const breedArr = getFromStorage("breedArr");
-// Hiển thị danh sách
+// Render Breeds data
 renderTableBreed(breedArr);
-// const breedArr = [];
-
-// breedArr.push(breed1);
-// breedArr.push(breed2);
-// breedArr.push(breed4);
-
 
 ////////////
-// Bắt sự kiện vào nút submit
+//Run when user click submit
 btnSubmit.addEventListener("click", function () {
-  //Lấy dữ liệu từ form
   const data = {
     breed: breedInput.value,
     type: typeInput.value,
   };
 
-  // Validate dữ liệu
+  // Validate inputs
   const isValidate = validate(data);
   if (isValidate) {
-    // thêm dữ liệu vào các mảng Breed
     breedArr.push(data);
-    // lưu dữ liệu lại(cập nhật dữ liệu)
     saveToStorage("breedArr", breedArr);
-    // hiển thị lại bảng thông tin các Breed
     renderTableBreed(breedArr);
-    // xóa thông tin từ form nhập
-    deleteForm();
+    clearInput();
   }
 });
+
 function validate(data) {
   let isValidate = true;
-  // Nếu nhập vào 1 chuỗi trống hoặc 1 chuỗi toàn khoảng trắng thì báo lỗi
-  if (breedInput.value.trim().lenghth === 0) {
-    alert("please input for breed !");
-    isValidate = fasle;
+  const InputErrors = [];
+  // Empty breed name field
+  if (breedInput.value.trim().length === 0) {
+    InputErrors.push(" Breed name is empty");
+    isValidate = false;
   }
-  // Bắt lỗi phải chọn type
+  // Type selection left at default
   if (data.type === "Select Type") {
-    alert("Please select Type !");
+    InputErrors.push(" Type must be selected");
+    isValidate = false;
+  }
+
+  if (InputErrors.length === 0) {
+    isValidate = true;
+  } else {
+    alert(
+      `Please check the invalid properties of the pet's breed: ${InputErrors} `
+    );
     isValidate = false;
   }
   return isValidate;
 }
 
 //////
-// Hàm: xóa thông tin form
-function deleteForm() {
+//Clear user's input
+function clearInput() {
   breedInput.value = "";
   typeInput.value = "Select Type";
 }
-/////////
-// Hàm hiển thị thông tin các Breed lên bẳng
+
 function renderTableBreed(breedArr) {
   tableBodyEl.innerHTML = "";
-
-  // cứ mỗi loại Breed ta sẽ thêm 1 dòng (row) dữ liệu vào bảng
-  breedArr.forEach(function (breedItem, index) {
+  breedArr.forEach((breedItem, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
     <td scope="col">${index + 1}</td>
@@ -94,19 +95,14 @@ function renderTableBreed(breedArr) {
   });
 }
 /////////
-//Hàm xóa các breed
+//Delete a breed
 function deleteBreed(breed) {
-  // xác nhận xóa
-  const isDelete = confirm("Are you sure?");
-  if (isDelete) {
-    // Thức hiện bước xóa trong này
+  const isDeletable = confirm("Are you sure you want to delete this breed?");
+  if (isDeletable) {
     for (let i = 0; i < breedArr.length; i++) {
       if (breed === breedArr[i].breed) {
-        // XÓa khỏi mảng
         breedArr.splice(i, 1);
-        // Cập nhật lại dữ liệu dưới dạng local storage
         saveToStorage("breedArr", breedArr);
-        // Gọi lại hàm hiển thị
         renderTableBreed(breedArr);
         break;
       }

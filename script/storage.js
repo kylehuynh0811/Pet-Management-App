@@ -14,7 +14,7 @@ function addSidebarAnimation() {
 }
 
 addSidebarAnimation();
-
+/*
 const data1 = {
   id: "P001",
   name: "Tom",
@@ -43,7 +43,7 @@ const data2 = {
   sterilized: true,
   date: new Date().toLocaleDateString("vi-vn"),
 };
-
+*/
 function getFromStorage(key) {
   return JSON.parse(localStorage.getItem(key));
 }

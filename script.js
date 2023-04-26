@@ -12,7 +12,7 @@ const vaccinatedInput = document.getElementById("input-vaccinated");
 const dewormedInput = document.getElementById("input-dewormed");
 const sterilizedInput = document.getElementById("input-sterilized");
 const tableBodyEl = document.getElementById("tbody");
-
+/*
 const test1 = {
   id: "P001",
   name: "Tom",
@@ -41,7 +41,7 @@ const test2 = {
   sterilized: true,
   date: new Date().toLocaleDateString("vi-VN"),
 };
-//Test data
+*/
 let petArr = getFromStorage("petArr") ?? [];
 renderTableData(petArr);
 
@@ -213,13 +213,13 @@ function renderTableData(petArr) {
 function deletePet(petId) {
   const isDeletable = confirm("Are you sure you want to delete this pet?");
   if (isDeletable) {
-    for (let i = 0; i < petArr.length; i++) {
-      if (petId === petArr[i].id) {
-        petArr.splice(i, 1);
+    petArr.forEach((pet) => {
+      if (petId === pet.id) {
+        petArr.splice(pet, 1);
+        localStorage.removeItem(pet);
         renderTableData(petArr);
-        break;
       }
-    }
+    });
   }
 }
 //Show healthy pet

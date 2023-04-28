@@ -14,7 +14,7 @@ function addSidebarAnimation() {
 }
 
 addSidebarAnimation();
-/*
+//Test data when the input is empty
 const data1 = {
   id: "P001",
   name: "Tom",
@@ -43,7 +43,7 @@ const data2 = {
   sterilized: true,
   date: new Date().toLocaleDateString("vi-vn"),
 };
-*/
+
 function getFromStorage(key) {
   return JSON.parse(localStorage.getItem(key));
 }
@@ -51,6 +51,7 @@ function getFromStorage(key) {
 function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
+/*
 // Lấy dữ liệu petArr
 if (!getFromStorage("petArr")) {
   saveToStorage("petArr", [data1, data2]);
@@ -59,3 +60,4 @@ if (!getFromStorage("petArr")) {
 if (!getFromStorage("breedArr")) {
   saveToStorage("breedArr", [data1, data2]);
 }
+*/

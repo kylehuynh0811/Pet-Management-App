@@ -26,7 +26,7 @@ if (!getFromStorage("breedArr")) {
   saveToStorage("breedArr", [breed1, breed2, breed4]);
 }
 
-const breedArr = getFromStorage("breedArr");
+let breedArr = getFromStorage("breedArr") ?? [];
 // Render Breeds data
 renderTableBreed(breedArr);
 
@@ -79,7 +79,7 @@ function clearInput() {
   breedInput.value = "";
   typeInput.value = "Select Type";
 }
-
+//Show the table of breeds
 function renderTableBreed(breedArr) {
   tableBodyEl.innerHTML = "";
   breedArr.forEach((breedItem, index) => {
@@ -96,16 +96,15 @@ function renderTableBreed(breedArr) {
 }
 /////////
 //Delete a breed
-function deleteBreed(breed) {
-  const isDeletable = confirm("Are you sure you want to delete this breed?");
+function deleteBreed(breedId) {
+  const isDeletable = confirm("Are you sure you want to delete this pet?");
   if (isDeletable) {
-    for (let i = 0; i < breedArr.length; i++) {
-      if (breed === breedArr[i].breed) {
-        breedArr.splice(i, 1);
-        saveToStorage("breedArr", breedArr);
-        renderTableBreed(breedArr);
-        break;
+    breedArr.forEach((breedItem) => {
+      if (breedId === breedItem.breed) {
+        breedArr.splice(breedItem, 1);
       }
-    }
+    });
+    saveToStorage("breedArr", breedArr);
+    renderTableData(breedArr);
   }
 }

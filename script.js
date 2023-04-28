@@ -73,6 +73,7 @@ submitBtn.addEventListener("click", (e) => {
 
   if (validate) {
     petArr.push(data);
+    saveToStorage(data);
     //Show the pet in the table
     renderTableData(petArr);
     //Clear the user inputs in the form
@@ -216,10 +217,11 @@ function deletePet(petId) {
     petArr.forEach((pet) => {
       if (petId === pet.id) {
         petArr.splice(pet, 1);
-        localStorage.removeItem(pet);
-        renderTableData(petArr);
       }
     });
+    saveToStorage("petArr", petArr);
+    saveToStorage("breedArr", petArr);
+    renderTableData(petArr);
   }
 }
 //Show healthy pet

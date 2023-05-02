@@ -14,7 +14,6 @@ const dewormedInput = document.getElementById("input-dewormed");
 const sterilizedInput = document.getElementById("input-sterilized");
 const tableBodyEl = document.getElementById("tbody");
 const healthyBtn = document.getElementById("healthy-btn");
-
 const formEl = document.getElementById("container-form");
 const petArr = getFromStorage("petArr") ?? [];
 const breedArr = getFromStorage("breedArr") ?? [];
@@ -23,7 +22,6 @@ renderTableData(petArr);
 
 function renderTableData(petArr) {
   tableBodyEl.innerHTML = "";
-
   petArr.forEach((pet) => {
     const row = document.createElement("tr");
     row.innerHTML = `<th scope="row">${pet.id}</th>
@@ -47,35 +45,35 @@ function renderTableData(petArr) {
                 }"></i></td>
                 <td>${pet.date}</td>
                 <td>
-                  <button type="button" class="btn btn-warning" onclick="deletePet('${
+                  <button type="button" class="btn btn-warning" onclick="editPet('${
                     pet.id
                   }')">Edit</button>
                 </td>`;
     tableBodyEl.appendChild(row);
   });
 }
-///////////////
-// // Hàm sử lý khi người dùng nhấn vào các nhút Edit
-// function editEvent() {
-//   const editElList = document.querySelectorAll(".btn.btn-danger");
-//   editElList.forEach((editEl) => {
-//     // Sự kiện click vào nut edit
-//     editEl.addEventListener("click", function () {
-//       // Lấy id của thú cưng được edit
-//       const id = editEl.parentElement.parentElement.children[0].innerHTML;
-//       // Gọi hàm để edit
-//       editPet(id);
-//     });
-//   });
-// }
+/*
+//Hàm sử lý khi người dùng nhấn vào các nhút Edit
+function editEvent() {
+   const editElList = document.querySelectorAll(".btn.btn-danger");
+   editElList.forEach((editEl) => {
+     // Sự kiện click vào nut edit
+    editEl.addEventListener("click", function () {
+       // Lấy id của thú cưng được edit
+       const id = editEl.parentElement.parentElement.children[0].innerHTML;
+       // Gọi hàm để edit
+       editPet(id);
+     });
+  });
+}
+*/
 ///////
-// Hàm chỉnh sữa dữ liệu thông tin thú cưng
 function editPet(id) {
-  // HIện lại form nhập dữ liệu
+  //Unhide the form
   formEl.classList.remove("hide");
-  // Tìm đến dữ liệu của thú cưng cần edit
+  //Look for the exact pet to edit in petArr
   const pet = petArr.find((petItem) => petItem.id === id);
-  // hiển thị những thông tin của thú cưng lên form nhập
+  //Show the pet's info on the form
   idInput.value = id;
   nameInput.value = pet.name;
   ageInput.value = pet.age;
@@ -86,42 +84,40 @@ function editPet(id) {
   vaccinatedInput.checked = pet.vaccinated;
   dewormedInput.checked = pet.dewormed;
   sterilizedInput.checked = pet.sterilized;
-  // để hiển thị đúng các loại giống cho từng loại dog-cat
+  //Show the breed of the chosen type
   renderBreed();
-  // hiển thị dữ liệu loại giống thú cưng( dữ liệu ban đầu trước khi edit)
-  breedInput.value = `${pet.breed}`;
+  breedInput.value = pet.breed;
 }
 
-///////////////////
-// Sự kiện nhấp chuột vào input sau đó hiển thị các loại giống đúng với từng loại DOg cat
+//Show the breeds for user to choose
 typeInput.addEventListener("click", renderBreed);
-////////////////
-// Hfm hiển thị giống thú cưng theo từng loại nhất định
+
 function renderBreed() {
   breedInput.innerHTML = "<option>Select Breed</option>";
-  const breedDogs = breedArr.filter((breedItem) => breedItem.type === "Dog");
-  const breedCats = breedArr.filter((breedItem) => breedItem.type === "Cat");
-  // Nếu type là Dog
+  //Array for dog breeds
+  const DogBreeds = breedArr.filter((breedItem) => breedItem.type === "Dog");
+  //Array for cat breeds
+  const CatBreeds = breedArr.filter((breedItem) => breedItem.type === "Cat");
+
   if (typeInput.value === "Dog") {
-    breedDogs.forEach(function (breedItem) {
+    DogBreeds.forEach((breedItem) => {
       const option = document.createElement("option");
       option.innerHTML = `${breedItem.breed}`;
       breedInput.appendChild(option);
     });
-    // Nếu là Cat
-  } else if (typeInput.value === "Cat") {
-    breedCats.forEach(function (breedItem) {
+  }
+  if (typeInput.value === "Cat") {
+    CatBreeds.forEach((breedItem) => {
       const option = document.createElement("option");
       option.innerHTML = `${breedItem.breed}`;
       breedInput.appendChild(option);
     });
   }
 }
-
 ///////////////
-// SỰ kiện ấn vào nút submit form
+//Run when user click submit
 submitBtn.addEventListener("click", function () {
-  // lấy dữ liệu từ form
+  //Collect data from the form
   const data = {
     id: idInput.value,
     name: nameInput.value,
@@ -135,57 +131,93 @@ submitBtn.addEventListener("click", function () {
     dewormed: dewormedInput.checked,
     sterilized: sterilizedInput.checked,
   };
-  // validate dữ liệu hợp lệ
+  //Validate user's input
   const isValidate = validateData(data);
-
   if (isValidate) {
     const index = petArr.findIndex((pet) => pet.id === data.id);
-    // Vẫn giữ ngày thêm thú cưng
-    // data.date = petArr[index].date;
-    // cập nhật lại dữ liệu của thú cưng đó
+    //Keep the date
+    data.date = petArr[index].date;
+    //
     petArr[index] = data;
     saveToStorage("petArr", petArr);
-    // Ẩn form đi và hiện lại bảng dữ liệu thú cưng
+    //Make the form hidden and show the table
     formEl.classList.add("hide");
     renderTableData(petArr);
   }
 });
-
 /////////////////
-// validate dữ liệu hợp lệ
-// Hàm này sẽ trả về true nếu dữ liệu hợp lệ, và false nếu dữ liệu không hợp lệ
-let isValidate = true;
 function validateData(data) {
-  // Không có trường nào bị nhập thiếu dữ liệu
-  // Khai báo biến cờ hiệu
-
+  const InputErrors = [];
+  let isValidate = true;
+  // No empty input field
   if (data.id.trim() === "") {
-    alert("Emty value for ID");
+    InputErrors.push(" Pet ID is empty");
+    if (data.name.trim() === "") {
+      InputErrors.push(" Pet name is empty");
+    }
+    //Age must be between 1 and 15!
+    if (isNaN(data.age)) {
+      InputErrors.push(" Pet age is empty");
+    } else if (data.age < 1 || data.age > 15) {
+      InputErrors.push(" Pet age input must be between 1 and 15");
+    }
+    //Weight must be between 1 and 15!
+    if (isNaN(data.weight)) {
+      InputErrors.push(" Pet weight is empty");
+    } else if (data.weight < 1 || data.weight > 15) {
+      InputErrors.push(" Pet weight input must be between 1 and 15");
+    }
+    //Length must be between 1 and 100!
+    if (isNaN(data.length)) {
+      InputErrors.push(" Pet length is empty");
+    } else if (data.length < 1 || data.length > 100) {
+      InputErrors.push(" Pet length input must be between 1 and 100");
+    }
+    //Please select pet type!
+    if (data.type.trim() === "Select Type") {
+      InputErrors.push(" Pet type must be selected");
+    }
+    //Please select pet breed!
+    if (data.breed.trim() === "Select Breed") {
+      InputErrors.push(" Pet breed must be selected");
+    }
+  } else {
+    if (data.name.trim() === "") {
+      InputErrors.push(" Pet name is empty");
+    }
+    //Age must be between 1 and 15!
+    if (isNaN(data.age)) {
+      InputErrors.push(" Pet age is empty");
+    } else if (data.age < 1 || data.age > 15) {
+      InputErrors.push(" Pet age input must be between 1 and 15");
+    }
+    //Weight must be between 1 and 15!
+    if (isNaN(data.weight)) {
+      InputErrors.push(" Pet weight is empty");
+    } else if (data.weight < 1 || data.weight > 15) {
+      InputErrors.push(" Pet weight input must be between 1 and 15");
+    }
+    //Length must be between 1 and 100!
+    if (isNaN(data.length)) {
+      InputErrors.push(" Pet length is empty");
+    } else if (data.length < 1 || data.length > 100) {
+      InputErrors.push(" Pet length input must be between 1 and 100");
+    }
+    //Please select pet type!
+    if (data.type.trim() === "Select Type") {
+      InputErrors.push(" Pet type must be selected");
+    }
+    //Please select pet breed!
+    if (data.breed.trim() === "Select Breed") {
+      InputErrors.push(" Pet breed must be selected");
+    }
+  }
+  //console.log(InputErrors);
+  if (InputErrors.length === 0) {
+    isValidate = true;
+  } else {
+    alert(`Please check the invalid properties of the pet: ${InputErrors} `);
     isValidate = false;
   }
-  if (data.name.trim() === "") {
-    alert("Emty value for Name");
-    isValidate = false;
-  }
-  if (isNaN(data.age)) {
-    alert("Emty value for Age");
-    isValidate = false;
-  }
-  if (isNaN(data.weight)) {
-    alert("Emty value for Weight");
-    isValidate = false;
-  }
-  if (isNaN(data.length)) {
-    alert("Emty value for Length");
-    isValidate = false;
-  }
-
-  // for (let i = 0; i < petArr.length; i++) {
-  //   if (data.id == petArr[i].id) {
-  //     alert("ID must unique");
-  //     isValidate = false;
-  //     break;
-  //   }
-  // }
   return isValidate;
 }

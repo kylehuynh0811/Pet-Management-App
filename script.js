@@ -12,38 +12,85 @@ const vaccinatedInput = document.getElementById("input-vaccinated");
 const dewormedInput = document.getElementById("input-dewormed");
 const sterilizedInput = document.getElementById("input-sterilized");
 const tableBodyEl = document.getElementById("tbody");
-/*
-const test1 = {
+const petArr = getFromStorage("petArr") ?? [];
+const breedArr = getFromStorage("breedArr") ?? [];
+//Test data when the input is empty
+const data1 = {
   id: "P001",
   name: "Tom",
   age: 3,
   type: "Cat",
   weight: 5,
   length: 50,
-  color: "rgb(255,0,0)",
+  color: "red",
   breed: "Tabby",
   vaccinated: true,
   dewormed: true,
   sterilized: true,
-  date: new Date().toLocaleDateString("vi-VN"),
+  date: new Date().toLocaleDateString("vi-vn"),
 };
-const test2 = {
+const data2 = {
   id: "P002",
-  name: "Tyke",
-  age: 5,
+  name: "Jerry",
+  age: 4,
   type: "Dog",
-  weight: 3,
-  length: 40,
-  color: "rgb(0,128,0)",
-  breed: "Phu Quoc",
+  weight: 10,
+  length: 65,
+  color: "pink",
+  breed: "nani",
+  vaccinated: true,
+  dewormed: false,
+  sterilized: true,
+  date: new Date().toLocaleDateString("vi-vn"),
+};
+const data3 = {
+  id: "P003",
+  name: "Kilo",
+  age: 2,
+  type: "Dog",
+  weight: 12,
+  length: 50,
+  color: "blue",
+  breed: "Bulldog",
   vaccinated: false,
   dewormed: false,
   sterilized: true,
-  date: new Date().toLocaleDateString("vi-VN"),
+  date: new Date().toLocaleDateString("vi-vn"),
 };
-*/
-let petArr = getFromStorage("petArr") ?? [];
+
+//Use the sample data when localStorage is empty
+if (petArr.length === 0) {
+  saveToStorage("petArr", [data1, data2, data3]);
+}
+
 renderTableData(petArr);
+
+//When user choose the pet type, show the breeds according to the type chosen
+typeInput.addEventListener("click", renderBreeds());
+
+function renderBreeds() {
+  breedInput.innerHTML = "<option>Select Breed</option>";
+  //Array for dog breeds
+  const breedDogs = breedArr.filter((breedItem) => breedItem.type === "Dog");
+  //Array for cat breeds
+  const breedCats = breedArr.filter((breedItem) => breedItem.type === "Cat");
+
+  //Selected type is Dog
+  if (typeInput.value === "Dog") {
+    breedDogs.forEach(function (breedItem) {
+      const option = document.createElement("option");
+      option.innerHTML = `${breedItem.breed}`;
+      breedInput.appendChild(option);
+    });
+    //Selected type is Cat
+  } else if (typeInput.value === "Cat") {
+    breedCats.forEach(function (breedItem) {
+      const option = document.createElement("option");
+      option.innerHTML = `${breedItem.breed}`;
+      breedInput.appendChild(option);
+    });
+  }
+}
 
 //Run when user click "Submit"
 submitBtn.addEventListener("click", (e) => {
@@ -64,7 +111,8 @@ submitBtn.addEventListener("click", (e) => {
     sterilized: sterilizedInput.checked,
     date: new Date().toLocaleDateString("vi-VN"),
   };
-  console.log(data);
+
+  //console.log(data);
   //Validate the data before processing
 
   const validate = validateData(data);
@@ -73,10 +121,8 @@ submitBtn.addEventListener("click", (e) => {
 
   if (validate) {
     petArr.push(data);
-    saveToStorage(data);
-    //Show the pet in the table
+    saveToStorage("petArr", data);
     renderTableData(petArr);
-    //Clear the user inputs in the form
     clearInput();
   }
 });
@@ -210,20 +256,24 @@ function renderTableData(petArr) {
     tableBodyEl.appendChild(row);
   });
 }
-// Delete a pet when user click on the Delete button\
+// Delete a pet when user click on the Delete button
 function deletePet(petId) {
   const isDeletable = confirm("Are you sure you want to delete this pet?");
   if (isDeletable) {
-    petArr.forEach((pet) => {
-      if (petId === pet.id) {
-        petArr.splice(pet, 1);
-      }
-    });
+    DeleteChosenPet(petId);
     saveToStorage("petArr", petArr);
-    saveToStorage("breedArr", petArr);
     renderTableData(petArr);
   }
 }
+//Looping through the array to find the pet user want to be deleted
+const DeleteChosenPet = (petId) => {
+  for (let i = 0; i < petArr.length; i++) {
+    if (petId === petArr[i].id) {
+      petArr.splice(i, 1);
+      break;
+    }
+  }
+};
 //Show healthy pet
 let healthyCheck = true;
 const healthyBtn = document.getElementById("healthy-btn");
@@ -244,3 +294,28 @@ healthyBtn.addEventListener("click", () => {
   }
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+//Show the breeds for user to choose
+typeInput.addEventListener("click", renderBreed);
+
+function renderBreed() {
+  breedInput.innerHTML = "<option>Select Breed</option>";
+  //Array for dog breeds
+  const DogBreeds = breedArr.filter((breedItem) => breedItem.type === "Dog");
+  //Array for cat breeds
+  const CatBreeds = breedArr.filter((breedItem) => breedItem.type === "Cat");
+
+  if (typeInput.value === "Dog") {
+    DogBreeds.forEach((breedItem) => {
+      const option = document.createElement("option");
+      option.innerHTML = `${breedItem.breed}`;
+      breedInput.appendChild(option);
+    });
+  }
+  if (typeInput.value === "Cat") {
+    CatBreeds.forEach((breedItem) => {
+      const option = document.createElement("option");
+      option.innerHTML = `${breedItem.breed}`;
+      breedInput.appendChild(option);
+    });
+  }
+}

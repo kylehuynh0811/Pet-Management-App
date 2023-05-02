@@ -4,29 +4,25 @@ const breedInput = document.getElementById("input-breed");
 const typeInput = document.getElementById("input-type");
 const btnSubmit = document.getElementById("submit-btn");
 const tableBodyEl = document.getElementById("tbody");
+const breedArr = getFromStorage("breedArr") ?? [];
 
-/*
-//Test data for breeds
 const breed1 = {
-  breed: "Mixed Breed",
-  type: "Dog",
-};
-const breed2 = {
   breed: "Tabby",
   type: "Cat",
 };
-const breed4 = {
-  breed: "Meo Muop",
-  type: "Cat",
+const breed2 = {
+  breed: "nani",
+  type: "Dog",
 };
-*/
+const breed3 = {
+  breed: "Bulldog",
+  type: "Dog",
+};
 
-// Get the Breeds data from local storage
-if (!getFromStorage("breedArr")) {
-  saveToStorage("breedArr", [breed1, breed2, breed4]);
+if (breedArr.length === 0) {
+  saveToStorage("breedArr", [breed1, breed2, breed3]);
 }
 
-let breedArr = getFromStorage("breedArr") ?? [];
 // Render Breeds data
 renderTableBreed(breedArr);
 
@@ -42,7 +38,7 @@ btnSubmit.addEventListener("click", function () {
   const isValidate = validate(data);
   if (isValidate) {
     breedArr.push(data);
-    saveToStorage("breedArr", breedArr);
+    saveToStorage("breedArr", data);
     renderTableBreed(breedArr);
     clearInput();
   }
@@ -57,7 +53,7 @@ function validate(data) {
     isValidate = false;
   }
   // Type selection left at default
-  if (data.type === "Select Type") {
+  if (typeInput.value === "Select Type") {
     InputErrors.push(" Type must be selected");
     isValidate = false;
   }
@@ -88,9 +84,9 @@ function renderTableBreed(breedArr) {
     <td scope="col">${index + 1}</td>
     <td scope="col">${breedItem.breed}</td>
     <td scope="col">${breedItem.type}</td>
-    <td><button type="button" onclick= "deleteBreed(${
+    <td><button type="button" onclick= "deleteBreed('${
       breedItem.breed
-    })"class="btn btn-danger">Delete</button></td>`;
+    }')" class="btn btn-danger">Delete</button></td>`;
     tableBodyEl.appendChild(row);
   });
 }
@@ -99,12 +95,17 @@ function renderTableBreed(breedArr) {
 function deleteBreed(breedId) {
   const isDeletable = confirm("Are you sure you want to delete this pet?");
   if (isDeletable) {
-    breedArr.forEach((breedItem) => {
-      if (breedId === breedItem.breed) {
-        breedArr.splice(breedItem, 1);
-      }
-    });
+    DeleteChosenBreed(breedId);
     saveToStorage("breedArr", breedArr);
-    renderTableData(breedArr);
+    renderTableBreed(breedArr);
   }
 }
+//Looping through the array to find the pet user want to be deleted
+const DeleteChosenBreed = (breedId) => {
+  for (let i = 0; i < breedArr.length; i++) {
+    if (breedId === breedArr[i].breed) {
+      breedArr.splice(i, 1);
+      break;
+    }
+  }
+};

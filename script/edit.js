@@ -15,67 +15,59 @@ const sterilizedInput = document.getElementById("input-sterilized");
 const tableBodyEl = document.getElementById("tbody");
 const healthyBtn = document.getElementById("healthy-btn");
 
-/// Hiển thị các thú cưng vào bảng
+const formEl = document.getElementById("container-form");
+const petArr = getFromStorage("petArr") ?? [];
+const breedArr = getFromStorage("breedArr") ?? [];
+
 renderTableData(petArr);
+
 function renderTableData(petArr) {
-  // XÓa nội dung hiện có của bảng
   tableBodyEl.innerHTML = "";
-  // Với mỗi thú cưng có trong dãy petArr, tạo 1 hàng chưa dữ liệu của thú cưng trên bảng
+
   petArr.forEach((pet) => {
     const row = document.createElement("tr");
     row.innerHTML = `<th scope="row">${pet.id}</th>
-    <td>${pet.name}</td>
-    <td>${pet.age}</td>
-    <td>${pet.type}</td>
-    <td>${pet.weight} kg</td>
-    <td>${pet.length} cm</td>
-    <td>${pet.breed}</td>
-    <td>
-      <i class="bi bi-square-fill" style="color: ${pet.color}"></i>
-    </td>
-    <td><i class="bi ${
-      pet.vaccinated ? "bi-check-circle-fill" : "bi-x-circle-fill"
-    }"></i></td>
-    <td><i class="bi ${
-      pet.dewormed ? "bi-check-circle-fill" : "bi-x-circle-fill"
-    }"></i></td>
-    <td><i class="bi ${
-      pet.sterilized ? "bi-check-circle-fill" : "bi-x-circle-fill"
-    }"></i></td>
-    <td>${mydate}</td>
-    <td>
-<button class="btn btn-danger" onclick="editPet('${pet.id}')">Edit</button>
-</td>
-    `;
-    `;
-  `;
+                <td>${pet.name}</td>
+                <td>${pet.age}</td>
+                <td>${pet.type}</td>
+                <td>${pet.weight}</td>
+                <td>${pet.length}</td>
+                <td>${pet.breed}</td>
+                <td>
+                  <i class="bi bi-square-fill" style="color:${pet.color}"></i>
+                </td>
+                <td><i class="bi ${
+                  pet.vaccinated ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td><i class="bi ${
+                  pet.dewormed ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td><i class="bi ${
+                  pet.sterilized ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td>${pet.date}</td>
+                <td>
+                  <button type="button" class="btn btn-warning" onclick="deletePet('${
+                    pet.id
+                  }')">Edit</button>
+                </td>`;
     tableBodyEl.appendChild(row);
   });
 }
-
-// Hàm hiển thị thời gian
-function displayTime(date) {
-  if (typeof date === "string") {
-    return date;
-  } else if (typeof date === "object") {
-    return JSON.parse(JSON.stringify(date));
-  }
-}
-
 ///////////////
-// Hàm sử lý khi người dùng nhấn vào các nhút Edit
-function editEvent() {
-  const editElList = document.querySelectorAll(".btn.btn-danger");
-  editElList.forEach((editEl) => {
-    // Sự kiện click vào nut edit
-    editEl.addEventListener("click", function () {
-      // Lấy id của thú cưng được edit
-      const id = editEl.parentElement.parentElement.children[0].innerHTML;
-      // Gọi hàm để edit
-      editPet(id);
-    });
-  });
-}
+// // Hàm sử lý khi người dùng nhấn vào các nhút Edit
+// function editEvent() {
+//   const editElList = document.querySelectorAll(".btn.btn-danger");
+//   editElList.forEach((editEl) => {
+//     // Sự kiện click vào nut edit
+//     editEl.addEventListener("click", function () {
+//       // Lấy id của thú cưng được edit
+//       const id = editEl.parentElement.parentElement.children[0].innerHTML;
+//       // Gọi hàm để edit
+//       editPet(id);
+//     });
+//   });
+// }
 ///////
 // Hàm chỉnh sữa dữ liệu thông tin thú cưng
 function editPet(id) {
@@ -144,12 +136,12 @@ submitBtn.addEventListener("click", function () {
     sterilized: sterilizedInput.checked,
   };
   // validate dữ liệu hợp lệ
-  const isValidate = validate(data);
+  const isValidate = validateData(data);
 
   if (isValidate) {
-    const index = petArr.findIndex((pet) => pet.Id === data.id);
+    const index = petArr.findIndex((pet) => pet.id === data.id);
     // Vẫn giữ ngày thêm thú cưng
-    data.date = petArr[index].date;
+    // data.date = petArr[index].date;
     // cập nhật lại dữ liệu của thú cưng đó
     petArr[index] = data;
     saveToStorage("petArr", petArr);
@@ -188,12 +180,12 @@ function validateData(data) {
     isValidate = false;
   }
 
-  for (let i = 0; i < petArr.length; i++) {
-    if (data.id == petArr[i].id) {
-      alert("ID must unique");
-      isValidate = false;
-      break;
-    }
-  }
+  // for (let i = 0; i < petArr.length; i++) {
+  //   if (data.id == petArr[i].id) {
+  //     alert("ID must unique");
+  //     isValidate = false;
+  //     break;
+  //   }
+  // }
   return isValidate;
 }

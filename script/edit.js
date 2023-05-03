@@ -32,7 +32,9 @@ function renderTableData(petArr) {
                 <td>${pet.length}</td>
                 <td>${pet.breed}</td>
                 <td>
-                  <i class="bi bi-square-fill" style="color:${pet.color}"></i>
+                  <i type="color" class="bi bi-square-fill" style="color:${
+                    pet.color
+                  }"></i>
                 </td>
                 <td><i class="bi ${
                   pet.vaccinated ? "bi-check-circle-fill" : "bi-x-circle-fill"
@@ -52,22 +54,7 @@ function renderTableData(petArr) {
     tableBodyEl.appendChild(row);
   });
 }
-/*
-//Hàm sử lý khi người dùng nhấn vào các nhút Edit
-function editEvent() {
-   const editElList = document.querySelectorAll(".btn.btn-danger");
-   editElList.forEach((editEl) => {
-     // Sự kiện click vào nut edit
-    editEl.addEventListener("click", function () {
-       // Lấy id của thú cưng được edit
-       const id = editEl.parentElement.parentElement.children[0].innerHTML;
-       // Gọi hàm để edit
-       editPet(id);
-     });
-  });
-}
-*/
-///////
+
 function editPet(id) {
   //Unhide the form
   formEl.classList.remove("hide");

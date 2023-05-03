@@ -14,16 +14,12 @@ const dewormedInput = document.getElementById("input-dewormed");
 const sterilizedInput = document.getElementById("input-sterilized");
 const tableBodyEl = document.getElementById("tbody");
 const healthyBtn = document.getElementById("healthy-btn");
-
 const findBtn = document.getElementById("find-btn");
+const petArr = getFromStorage("petArr") ?? [];
+const breedArr = getFromStorage("breedArr") ?? [];
 
-const breedArr = getFromStorage("breedArr");
-
-//////////////////``
-//Bắt sự kiện vào nút Find
-// TÌm kiếm các thú cưng theo điều kiện nhập vào và hiển thị thông tin các thú cưng đáp ứng điều kiện đó
-
-findBtn.addEventListener("click", function () {
+//Run when user click the Find button
+findBtn.addEventListener("click", () => {
   // Lưu ý 1: nếu người dùng không nhập các trường dữ liệu để tìm kiêm mà ấn submit
   // thì cũng hiển thị toàn bộ danh sách thu cưng
   // Lưu ý 2: nếu người dùng nhập nhiều truòng dữ liệu thì sẽ đưa ra kết quả
@@ -31,87 +27,69 @@ findBtn.addEventListener("click", function () {
 
   let petArrFind = petArr;
   if (idInput.value) {
-    petArrFind = petArrFind.filter((pet) => pet.id.includes(idInput.value));
+    petArrFind.push(petArr.filter((pet) => pet.id.includes(idInput.value)));
   }
-  // nếu nhập vào nam thì tìm theo name
+  //Name condition
   if (nameInput.value) {
     petArrFind = petArrFind.filter((pet) => pet.name.includes(nameInput.value));
   }
-  // Nếu chọn type thì tìm theo type
+  //Type condition
   if (typeInput.value !== "Select type") {
     petArrFind = petArrFind.filter((pet) => pet.type === typeInput.value);
   }
-  // Nếu chọn breed thì tìm theo breed
+  //Breed condition
   if (breedInput.value !== "Select Breed") {
     petArrFind = petArrFind.filter((pet) => pet.breed === breedInput.value);
   }
-  // Nếu tích chọn vaccinatedInput
+  //Vaccinated condition
   if (vaccinatedInput.checked === true) {
     petArrFind = petArrFind.filter((pet) => pet.vaccinated === true);
   }
-  // Nếu tích chọn dewormedInput
+  //Dewormed condition
   if (dewormedInput.checked === true) {
     petArrFind = petArrFind.filter((pet) => pet.dewormed === true);
   }
-  // nếu tích chọn sterilizedInput
+  //Sterilized condition
   if (sterilizedInput.checked === true) {
     petArrFind = petArrFind.filter((pet) => pet.sterilized === true);
   }
-  // Hiển thị các thú cưng thỏa điều kiện tìm kiếm
-
+  //Display all pets that fit the conditions
   renderTableData(petArrFind);
 });
-
+//Render the table on the site
 renderTableData(petArr);
+
 function renderTableData(petArr) {
   tableBodyEl.innerHTML = "";
-  console.log(petArr);
-  for (let i = 0; i <= petArr.length; i++) {
+
+  petArr.forEach((pet) => {
     const row = document.createElement("tr");
-    // var date = 1;
-    var mydate = 1;
-    row.innerHTML = `
-    <th scope="row">${petArr[i].id}</th>
-							<td>${petArr[i].name}</td>
-							<td>${petArr[i].age}</td>
-							<td>${petArr[i].type}</td>
-							<td>${petArr[i].weight} kg</td>
-							<td>${petArr[i].length} cm</td>
-							<td>${petArr[i].breed}</td>
-							<td>
-								<i class="bi bi-square-fill" style="color: ${petArr[i].color}"></i>
-							</td>
-							<td><i class="bi ${
-                petArr[i].vaccinated
-                  ? "bi-check-circle-fill"
-                  : "bi-x-circle-fill"
-              }"></i></td>
-							<td><i class="bi ${
-                petArr[i].dewormed ? "bi-check-circle-fill" : "bi-x-circle-fill"
-              }"></i></td>
-							<td><i class="bi ${
-                petArr[i].sterilized
-                  ? "bi-check-circle-fill"
-                  : "bi-x-circle-fill"
-              }"></i></td>
-							<td>${mydate}</td>`;
+    row.innerHTML = `<th scope="row">${pet.id}</th>
+                <td>${pet.name}</td>
+                <td>${pet.age}</td>
+                <td>${pet.type}</td>
+                <td>${pet.weight}</td>
+                <td>${pet.length}</td>
+                <td>${pet.breed}</td>
+                <td>
+                  <i class="bi bi-square-fill" style="color:${pet.color}"></i>
+                </td>
+                <td><i class="bi ${
+                  pet.vaccinated ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td><i class="bi ${
+                  pet.dewormed ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td><i class="bi ${
+                  pet.sterilized ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td>${pet.date}</td> `;
     tableBodyEl.appendChild(row);
-  }
+  });
 }
-/////
-// Hàm hiển thị thời gian
-function displayTim(date) {
-  if (typeof date === "string") {
-    return date;
-  } else if (typeof date === "object") {
-    return JSON.parse(JSON.stringify(date));
-  }
-}
-/// HIển thị các loại giống breed
+
 renderBreed();
-/////
-// Hàm: hiển thị tất cả các giống breed
-// Lưu ý tất cả các loại giống thú cưng: không phân biệt chó hay mèo
+
 function renderBreed() {
   breedArr.forEach(function (breedItem) {
     const option = document.createElement("option");

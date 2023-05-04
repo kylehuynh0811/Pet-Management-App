@@ -65,36 +65,31 @@ findBtn.addEventListener("click", function () {
 renderTableData(petArr);
 function renderTableData(petArr) {
   tableBodyEl.innerHTML = "";
-  console.log(petArr);
-  for (let i = 0; i <= petArr.length; i++) {
+
+  petArr.forEach((pet) => {
     const row = document.createElement("tr");
-    row.innerHTML = `
-    <th scope="row">${petArr[i].id}</th>
-							<td>${petArr[i].name}</td>
-							<td>${petArr[i].age}</td>
-							<td>${petArr[i].type}</td>
-							<td>${petArr[i].weight} kg</td>
-							<td>${petArr[i].length} cm</td>
-							<td>${petArr[i].breed}</td>
-							<td>
-								<i class="bi bi-square-fill" style="color: ${petArr[i].color}"></i>
-							</td>
-							<td><i class="bi ${
-                petArr[i].vaccinated
-                  ? "bi-check-circle-fill"
-                  : "bi-x-circle-fill"
-              }"></i></td>
-							<td><i class="bi ${
-                petArr[i].dewormed ? "bi-check-circle-fill" : "bi-x-circle-fill"
-              }"></i></td>
-							<td><i class="bi ${
-                petArr[i].sterilized
-                  ? "bi-check-circle-fill"
-                  : "bi-x-circle-fill"
-              }"></i></td>
-							<td>${petArr[i].date}</td>`;
+    row.innerHTML = `<th scope="row">${pet.id}</th>
+                <td>${pet.name}</td>
+                <td>${pet.age}</td>
+                <td>${pet.type}</td>
+                <td>${pet.weight}</td>
+                <td>${pet.length}</td>
+                <td>${pet.breed}</td>
+                <td>
+                  <i class="bi bi-square-fill" style="color:${pet.color}"></i>
+                </td>
+                <td><i class="bi ${
+                  pet.vaccinated ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td><i class="bi ${
+                  pet.dewormed ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td><i class="bi ${
+                  pet.sterilized ? "bi-check-circle-fill" : "bi-x-circle-fill"
+                }"></i></td>
+                <td>${pet.date}</td>`;
     tableBodyEl.appendChild(row);
-  }
+  });
 }
 /// HIển thị các loại giống breed
 renderBreed();

@@ -29,35 +29,88 @@ findBtn.addEventListener("click", function () {
   // Nhập vào id thì tìm theo id
 
   let petArrFind = petArr;
-  if (idInput.value) {
-    petArrFind = petArrFind.filter((pet) => pet.id.includes(idInput.value));
+  if (
+    typeInput.value === "Select Type" &&
+    breedInput.value === "Select Breed"
+  ) {
+    if (idInput.value) {
+      petArrFind = petArrFind.filter((pet) => pet.id.includes(idInput.value));
+    }
+    if (nameInput.value) {
+      petArrFind = petArrFind.filter((pet) =>
+        pet.name.includes(nameInput.value)
+      );
+    }
+    if (vaccinatedInput.checked === true) {
+      petArrFind = petArrFind.filter((pet) => pet.vaccinated === true);
+    }
+    if (dewormedInput.checked === true) {
+      petArrFind = petArrFind.filter((pet) => pet.dewormed === true);
+    }
+    if (sterilizedInput.checked === true) {
+      petArrFind = petArrFind.filter((pet) => pet.sterilized === true);
+    }
+  } else {
+    // Nếu chọn type thì tìm theo type
+    if (typeInput.value === "Select Type") {
+      if (breedInput.value !== "Select Breed") {
+        petArrFind = petArrFind.filter((pet) => pet.breed === breedInput.value);
+      }
+      if (idInput.value) {
+        petArrFind = petArrFind.filter((pet) => pet.id.includes(idInput.value));
+      }
+      // nếu nhập vào nam thì tìm theo name
+      if (nameInput.value) {
+        petArrFind = petArrFind.filter((pet) =>
+          pet.name.includes(nameInput.value)
+        );
+      }
+      if (vaccinatedInput.checked === true) {
+        petArrFind = petArrFind.filter((pet) => pet.vaccinated === true);
+      }
+      // Nếu tích chọn dewormedInput
+      if (dewormedInput.checked === true) {
+        petArrFind = petArrFind.filter((pet) => pet.dewormed === true);
+      }
+      // nếu tích chọn sterilizedInput
+      if (sterilizedInput.checked === true) {
+        petArrFind = petArrFind.filter((pet) => pet.sterilized === true);
+      }
+    }
+    // Nếu chọn breed thì tìm theo breed
+    if (typeInput.value === "Select Breed") {
+      {
+        if (breedInput.value !== "Select Type") {
+          petArrFind = petArrFind.filter(
+            (pet) => pet.breed === typeInput.value
+          );
+        }
+        if (idInput.value) {
+          petArrFind = petArrFind.filter((pet) =>
+            pet.id.includes(idInput.value)
+          );
+        }
+        // nếu nhập vào nam thì tìm theo name
+        if (nameInput.value) {
+          petArrFind = petArrFind.filter((pet) =>
+            pet.name.includes(nameInput.value)
+          );
+        }
+        if (vaccinatedInput.checked === true) {
+          petArrFind = petArrFind.filter((pet) => pet.vaccinated === true);
+        }
+        // Nếu tích chọn dewormedInput
+        if (dewormedInput.checked === true) {
+          petArrFind = petArrFind.filter((pet) => pet.dewormed === true);
+        }
+        // nếu tích chọn sterilizedInput
+        if (sterilizedInput.checked === true) {
+          petArrFind = petArrFind.filter((pet) => pet.sterilized === true);
+        }
+      }
+    }
   }
-  // nếu nhập vào nam thì tìm theo name
-  if (nameInput.value) {
-    petArrFind = petArrFind.filter((pet) => pet.name.includes(nameInput.value));
-  }
-  // Nếu chọn type thì tìm theo type
-  if (typeInput.value !== "Select type") {
-    petArrFind = petArrFind.filter((pet) => pet.type === typeInput.value);
-  }
-  // Nếu chọn breed thì tìm theo breed
-  if (breedInput.value !== "Select Breed") {
-    petArrFind = petArrFind.filter((pet) => pet.breed === breedInput.value);
-  }
-  // Nếu tích chọn vaccinatedInput
-  if (vaccinatedInput.checked === true) {
-    petArrFind = petArrFind.filter((pet) => pet.vaccinated === true);
-  }
-  // Nếu tích chọn dewormedInput
-  if (dewormedInput.checked === true) {
-    petArrFind = petArrFind.filter((pet) => pet.dewormed === true);
-  }
-  // nếu tích chọn sterilizedInput
-  if (sterilizedInput.checked === true) {
-    petArrFind = petArrFind.filter((pet) => pet.sterilized === true);
-  }
-  // Hiển thị các thú cưng thỏa điều kiện tìm kiếm
-
+  // Hi
   renderTableData(petArrFind);
 });
 

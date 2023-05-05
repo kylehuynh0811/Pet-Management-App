@@ -65,33 +65,6 @@ if (petArr.length === 0) {
 
 renderTableData(petArr);
 
-//When user choose the pet type, show the breeds according to the type chosen
-typeInput.addEventListener("click", renderBreeds());
-
-function renderBreeds() {
-  breedInput.innerHTML = "<option>Select Breed</option>";
-  //Array for dog breeds
-  const breedDogs = breedArr.filter((breedItem) => breedItem.type === "Dog");
-  //Array for cat breeds
-  const breedCats = breedArr.filter((breedItem) => breedItem.type === "Cat");
-
-  //Selected type is Dog
-  if (typeInput.value === "Dog") {
-    breedDogs.forEach(function (breedItem) {
-      const option = document.createElement("option");
-      option.innerHTML = `${breedItem.breed}`;
-      breedInput.appendChild(option);
-    });
-    //Selected type is Cat
-  } else if (typeInput.value === "Cat") {
-    breedCats.forEach(function (breedItem) {
-      const option = document.createElement("option");
-      option.innerHTML = `${breedItem.breed}`;
-      breedInput.appendChild(option);
-    });
-  }
-}
-
 //Run when user click "Submit"
 submitBtn.addEventListener("click", (e) => {
   // Prevent the submit event from refreshing the page

@@ -14,10 +14,9 @@ const dewormedInput = document.getElementById("input-dewormed");
 const sterilizedInput = document.getElementById("input-sterilized");
 const tableBodyEl = document.getElementById("tbody");
 const healthyBtn = document.getElementById("healthy-btn");
-
 const findBtn = document.getElementById("find-btn");
-const petArr = getFromStorage("petArr");
-const breedArr = getFromStorage("breedArr");
+const petArr = getFromStorage("petArr") ?? [];
+const breedArr = getFromStorage("breedArr") ?? [];
 
 //////////////////``
 //Bắt sự kiện vào nút Find
@@ -92,11 +91,11 @@ function renderTableData(petArr) {
   });
 }
 /// HIển thị các loại giống breed
-renderBreed();
+renderBreeds();
 /////
 // Hàm: hiển thị tất cả các giống breed
 // Lưu ý tất cả các loại giống thú cưng: không phân biệt chó hay mèo
-function renderBreed() {
+function renderBreeds() {
   breedArr.forEach(function (breedItem) {
     const option = document.createElement("option");
     option.innerHTML = `${breedItem.breed}`;

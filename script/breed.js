@@ -38,7 +38,7 @@ btnSubmit.addEventListener("click", function () {
   const isValidate = validate(data);
   if (isValidate) {
     breedArr.push(data);
-    saveToStorage("breedArr", data);
+    saveToStorage("breedArr", breedArr);
     renderTableBreed(breedArr);
     clearInput();
   }

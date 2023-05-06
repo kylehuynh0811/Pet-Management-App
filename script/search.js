@@ -19,15 +19,11 @@ const petArr = getFromStorage("petArr") ?? [];
 const breedArr = getFromStorage("breedArr") ?? [];
 
 //////////////////``
-//Bắt sự kiện vào nút Find
-// TÌm kiếm các thú cưng theo điều kiện nhập vào và hiển thị thông tin các thú cưng đáp ứng điều kiện đó
+//RUn when user click "Find"
 
 findBtn.addEventListener("click", function () {
-  // Lưu ý 1: nếu người dùng không nhập các trường dữ liệu để tìm kiêm mà ấn submit
-  // thì cũng hiển thị toàn bộ danh sách thu cưng
-  // Lưu ý 2: nếu người dùng nhập nhiều truòng dữ liệu thì sẽ đưa ra kết quả
-  // Nhập vào id thì tìm theo id
-
+  // 1: If user leave all the fields empty, show every pet that is in the localStorrage
+  // 2: When user put in different criteria. show the pets that have every attribute matched with those criteria
   let petArrFind = petArr;
   if (
     typeInput.value === "Select Type" &&
@@ -51,7 +47,6 @@ findBtn.addEventListener("click", function () {
       petArrFind = petArrFind.filter((pet) => pet.sterilized === true);
     }
   } else {
-    // Nếu chọn type thì tìm theo type
     if (typeInput.value === "Select Type") {
       if (breedInput.value !== "Select Breed") {
         petArrFind = petArrFind.filter((pet) => pet.breed === breedInput.value);
@@ -59,7 +54,6 @@ findBtn.addEventListener("click", function () {
       if (idInput.value) {
         petArrFind = petArrFind.filter((pet) => pet.id.includes(idInput.value));
       }
-      // nếu nhập vào nam thì tìm theo name
       if (nameInput.value) {
         petArrFind = petArrFind.filter((pet) =>
           pet.name.includes(nameInput.value)
@@ -68,16 +62,13 @@ findBtn.addEventListener("click", function () {
       if (vaccinatedInput.checked === true) {
         petArrFind = petArrFind.filter((pet) => pet.vaccinated === true);
       }
-      // Nếu tích chọn dewormedInput
       if (dewormedInput.checked === true) {
         petArrFind = petArrFind.filter((pet) => pet.dewormed === true);
       }
-      // nếu tích chọn sterilizedInput
       if (sterilizedInput.checked === true) {
         petArrFind = petArrFind.filter((pet) => pet.sterilized === true);
       }
     }
-    // Nếu chọn breed thì tìm theo breed
     if (typeInput.value === "Select Breed") {
       {
         if (breedInput.value !== "Select Type") {
@@ -90,7 +81,6 @@ findBtn.addEventListener("click", function () {
             pet.id.includes(idInput.value)
           );
         }
-        // nếu nhập vào nam thì tìm theo name
         if (nameInput.value) {
           petArrFind = petArrFind.filter((pet) =>
             pet.name.includes(nameInput.value)
@@ -99,18 +89,16 @@ findBtn.addEventListener("click", function () {
         if (vaccinatedInput.checked === true) {
           petArrFind = petArrFind.filter((pet) => pet.vaccinated === true);
         }
-        // Nếu tích chọn dewormedInput
         if (dewormedInput.checked === true) {
           petArrFind = petArrFind.filter((pet) => pet.dewormed === true);
         }
-        // nếu tích chọn sterilizedInput
         if (sterilizedInput.checked === true) {
           petArrFind = petArrFind.filter((pet) => pet.sterilized === true);
         }
       }
     }
   }
-  // Hi
+  //Show the pet that match the criteria
   renderTableData(petArrFind);
 });
 

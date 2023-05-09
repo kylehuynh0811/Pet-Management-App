@@ -19,7 +19,7 @@ const petArr = getFromStorage("petArr") ?? [];
 const breedArr = getFromStorage("breedArr") ?? [];
 
 //////////////////``
-//RUn when user click "Find"
+//Run when user click "Find"
 
 findBtn.addEventListener("click", function () {
   // 1: If user leave all the fields empty, show every pet that is in the localStorrage
@@ -98,7 +98,7 @@ findBtn.addEventListener("click", function () {
       }
     }
   }
-  //Show the pet that match the criteria
+  //Show the pets that match the criteria
   renderTableData(petArrFind);
 });
 
@@ -131,11 +131,9 @@ function renderTableData(petArr) {
     tableBodyEl.appendChild(row);
   });
 }
-/// HIển thị các loại giống breed
+//Show all breeds
 renderBreeds();
-/////
-// Hàm: hiển thị tất cả các giống breed
-// Lưu ý tất cả các loại giống thú cưng: không phân biệt chó hay mèo
+
 function renderBreeds() {
   breedArr.forEach(function (breedItem) {
     const option = document.createElement("option");

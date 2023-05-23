@@ -74,6 +74,7 @@ function editPet(id) {
   //Show the breed of the chosen type
   renderBreed();
   breedInput.value = pet.breed;
+  console.log(pet.color)
 }
 
 //Show the breeds for user to choose

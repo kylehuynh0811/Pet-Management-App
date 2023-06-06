@@ -63,16 +63,17 @@ btnImport.addEventListener("click", () => {
 const checkFile = (data) => {
   //Check if the data user want to export is an array
   if (!(data instanceof Array)) {
-    alert("Invalid file: the file does not contain an array that store objects")
+    alert("Invalid file: the file does not contain an array that store objects");
     return false;
   }
   //Check if the data is a Pet object
-  if (!isPetObject) {
+  if (isPetObject === false) {
+    alert("Invalid file: the file contain some objects that are not pet objects");
     return false;
   }
   //Check if the data is in a valid format
-  if (!isValidate) {
-    alert("Invalid file: Objects in the file does not match the required format")
+  if (isValidate === false) {
+    alert("Invalid file: Objects in the file does not match the required format");
     return false;
   }
 
@@ -85,7 +86,7 @@ const isPetObject = (data) => {
     return false;
   }
   //Check if any Object miss any properties
-  const isOk = date.every((item) => {
+  const isOk = data.every((item) => {
     return (
       Object.keys(item).length === 12 &&
       item.hasOwnProperty("id") &&
@@ -103,7 +104,7 @@ const isPetObject = (data) => {
       );
   });
 
-  if (!isOk){
+  if (isOk === false){
     alert("Invalid file: an object contains invalid properties");
     return false;
   }
@@ -181,12 +182,12 @@ const isValidate = (data) => {
 
     for (let item of data){
       if (pet.id === item.id){
+        count++;
         //Duplicated ID
         if (count > 1) {
           alert("Invalid file: One or some pet IDs are duplicated");
           return false;
         }
-        count++;
       }
     }
 

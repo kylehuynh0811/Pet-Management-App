@@ -67,12 +67,12 @@ const checkFile = (data) => {
     return false;
   }
   //Check if the data is a Pet object
-  if (isPetObject === false) {
+  if (isPetObject(data) === false) {
     alert("Invalid file: the file contain some objects that are not pet objects");
     return false;
   }
   //Check if the data is in a valid format
-  if (isValidate === false) {
+  if (isValidate(data) === false) {
     alert("Invalid file: Objects in the file does not match the required format");
     return false;
   }
@@ -126,19 +126,19 @@ const isValidate = (data) => {
     }
 
     pet.age = parseInt(pet.age)
-    if (pet.age.trim().length === 0){
+    if (isNaN(pet.age) || pet.age < 1 || pet.age > 15){
       alert("Invalid file: File contains invalid ID");
       return false;
     }
 
     pet.weight = parseInt(pet.weight)
-    if (pet.weight.trim().length === 0){
+    if (isNaN(pet.weight) || pet.weight < 1 || pet.weight > 15){
       alert("Invalid file: File contains invalid Weight");
       return false;
     }
 
     pet.length = parseInt(pet.length)
-    if (pet.length.trim().length === 0){
+    if (isNaN(pet.length) || pet.length < 1 || pet.length > 100){
       alert("Invalid file: File contains invalid Length");
       return false;
     }
@@ -180,17 +180,16 @@ const isValidate = (data) => {
     //Check IDs for uniqueness
     let count = 1;
 
-    for (let item of data){
-      if (pet.id === item.id){
-        count++;
-        //Duplicated ID
-        if (count > 1) {
-          alert("Invalid file: One or some pet IDs are duplicated");
-          return false;
+    for(let item of data){
+      if (pet.ìd === item.id){
+        if(count >1){
+          alert("Invalid file: one or some IDs are duplicated");
         }
       }
+      count++;
     }
-
+   
+    
     return true;
   }
   )
